@@ -1,0 +1,119 @@
+// -*- ASCII:EDT -*-
+
+    Requires(20170214);
+
+    Prompt("This macro will install LaTeXify package...%\>
+It is recommended that you close all files (or project) to make it faster.%\%\>
+                            Continue?",1,0);
+
+    Assign("Package","LaTeXify");
+
+    PushTagsandRegisters;
+
+    StartWorking('Installing...');
+    ProcessMessages;
+
+    ShowConsole(1,1);
+    ResetConsole;
+    SetConsoleText("Installing...%\%\",1);
+    Call('Install_Start');
+    Call('Uninstall_Task');
+    SetConsoleText("%\Done...%\",1,1);
+
+    PopTagsandRegisters;
+
+    StopWorking;
+
+    Prompt("Installation Complete! See the Console for install info.",0,1);
+
+    Release("Filename");
+    Release("Filetype");
+    Release("Folder");
+    Release("Package");
+
+Exit;
+
+:Install_Start:: ====================================================
+
+    // Update config files
+    Assign("Filetype",".ini");
+
+      Assign("Folder","ConfigEx");
+      Assign("Filename","MainMenu");
+      Call('File_Update');
+      Assign("Filename","Toolbar");
+      Call('File_Update');
+
+      Assign("Folder","ConfigEx\Toolbars");
+      Assign("Filename","Toolbar1d");
+      Call('File_Update');
+
+    Assign("Filetype",".edt");
+
+      Assign("Folder","Exec");
+      Assign("Filename","Erase Working Files");
+      Call('File_Update');
+
+      Assign("Folder","Exec\TeX");
+      Assign("Filename","PDFTeXify");
+      Call('File_Update');
+      Assign("Filename","TeXify");
+      Call('File_Update');
+
+    // Reload personal settings
+    IfFileExists("%b\ConfigEx\UserPreferences.ini",!'LoadConfig("%b\ConfigEx\UserPreferences.ini");');
+    IfFileExists("%b\ConfigEx\Private.ini",!'LoadConfig("%b\ConfigEx\Private.ini");');
+
+Return;
+
+:File_Update:: ======================================================
+
+    IfFileExists('%b\%$(|Folder|);\%$(|Filename|);%$(|Filetype|);',!'Relax;',>
+      !'CopyFile("%B\%$(|Folder|);\%$(|Filename|);%$(|Filetype|);",>
+          "%b\%$(|Folder|);\%$(|Filename|);%$(|Filetype|);",1,1);');
+    ReadFile("%b\%$(|Folder|);\%$(|Filename|);%$(|Filetype|);",0);
+    LetRegNum(7,1);
+    Loop(!`>
+      IfFileExists('%C\Data\%$(|Filename|);_new%!7.dat',>
+        !|Call('Update_Substitute');LetRegNum(7,%!7+1);|,>
+        !|Stop;|);`);
+    WriteFile("%b\%$(|Folder|);\%$(|Filename|);%$(|Filetype|);","%!0");
+    IfStr('%$(|Filename|);','Toolbar1d','=',>
+      !'LoadConfig("%b\ConfigEx\Toolbar.ini");Return;');
+    IfStr('%$(|Filetype|);','.ini','=',>
+      !'LoadConfig("%b\%$(|Folder|);\%$(|Filename|);%$(|Filetype|);");');
+
+Return;
+
+:Update_Substitute:: ================================================
+
+    ReadFile("%C\Data\%$(|Filename|);_old%!7.dat",1);
+    ReadFile("%C\Data\%$(|Filename|);_new%!7.dat",2);
+    SubstituteInString("%!0","%!1","%!2");
+    IfOK(!'SetConsoleText("OK:      >
+File %$(|Folder|);\%$(|Filename|);%$(|Filetype|); successfully updated.%\",1,1);',>
+         !'FindInString("%!0","%!2",-1,-1,10);>
+           IfOK(!`SetConsoleText("OK:      >
+File %$(|Folder|);\%$(|Filename|);%$(|Filetype|); not modified (already OK).%\",1,1);`,>
+                !`SetConsoleText("ERROR:   >
+File %$(|Folder|);\%$(|Filename|);%$(|Filetype|); not updated!!!%\",1,1);`);');
+
+Return;
+
+:Uninstall_Task:: ===================================================
+
+    // Copy uninstaller
+    CopyFile("%C\Uninstall.edt","%b\Uninstall\%$(|Package|);\Uninstall.edt",1,1);>
+
+    // Copy uninstall files
+    ListFolderFiles(0,"%C\Data","",1,1);
+    LstEnum("%!0","%\");
+    LstGetCount(1);
+    Repeat(%!1,>
+      !`LstGetItem(2,%!c-1);>
+        CopyFile("%C\Data\%!2","%b\Uninstall\%$(|Package|);\Data\%!2",1,1);>
+        ProcessMessages;>
+       `);
+    LstRelease;
+
+Return;

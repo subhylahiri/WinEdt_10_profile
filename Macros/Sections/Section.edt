@@ -1,0 +1,23 @@
+// -*- ASCII:EDT -*-
+
+BeginGroup;
+LetReg(9,"\section{");
+IfSel('0','=',>
+      !'SelectParagraph;>
+        IfSel(''0'',''='',>
+              !''InsLine(0);>
+                 Ins("%%-------Section------------------------------------------------------------------");>
+                 InsLine(-1);InsLine(-1);>
+                 Ins("\section{}\label{}");>
+                 CharLeft(10);'',>
+              !''SelCharLeft;>
+                 IfSel(''''0'''',''''='''',>
+                       !''''InsLine(0);>
+                            Ins("%%-------Section------------------------------------------------------------------");>
+                            InsLine(-1);InsLine(-1);>
+                            Ins("\section{}\label{}");>
+                            CharLeft(10);'''',>
+                       !''''Exe("%b\Macros\Sections\CommonSections.edt");'''')'')',>
+      !'Exe("%b\Macros\Sections\CommonSections.edt");');
+EndGroup;
+End;

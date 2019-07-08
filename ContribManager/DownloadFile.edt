@@ -1,0 +1,87 @@
+// Download winedt.org file
+
+  PushTagsandRegisters;
+
+  GetAppDataFolder(0,1);
+
+  IfFileExists("%!0\Temp\Download.ini",!"DeleteFile('%!0\Temp\Download.ini');");
+
+  // Retrieve the zip path
+  ReadFile("%b\ContribManager\contrib.db",1);
+  FindInString("%!1","%$(|Package|);,\(0*\)>",-1,-1,11);
+  LetReg(5,"%#0");
+  GetVersion(4);
+
+  StartWorking('Attempting to connect...');
+
+  // Create a temp File
+  OpenOutput('%!0\Temp\Download.ini');
+  WrL('[DOWNLOAD]');
+  WrL('DOWNLOAD=http://www.winedt.org/datestamps/%!4/%$(|Package|);.dat');
+  WrL('[DESTFILE]');
+  WrL('DESTFILE=%$(|Package|);.dat');
+  CloseOutput;
+
+  // Download the file
+  WinExe('%C\WinEdt-download.exe','','%C','',11100);
+  GetExitCode(1);
+  IfNum('%!1',4,'=',>
+    !'Prompt("Unable to connect to the server",3,1);>
+      PopTagsandRegisters;StopWorking;Exit;');
+
+  StopWorking;
+
+  IfFileExists("%!0\Temp\Download.ini",!"DeleteFile('%!0\Temp\Download.ini');");
+  IfFileExists("%!0\Temp\Unzip.ini",!"DeleteFile('%!0\Temp\Unzip.ini');");
+
+  // Retrieve the zip name
+  ReadFile('%b\ContribManager\%$(|Package|);.dat',2);
+  DeleteFile('%b\ContribManager\%$(|Package|);.dat');
+  FindInString('%!2','\(0*\)>',-1,-1,11);
+
+  StartWorking('Downloading %#0...');
+
+  // Create a temp File
+  OpenOutput('%!0\Temp\Download.ini');
+  WrL('[DOWNLOAD]');
+  WrL('DOWNLOAD=http://www.winedt.org/%!5/%#0');
+  WrL('[DESTFILE]');
+  WrL('DESTFILE=%#0');
+  CloseOutput;
+
+  // Download the file
+  WinExe('%C\WinEdt-download.exe','','%C','',11100);
+  GetExitCode(1);
+  IfNum('%!1',4,'=',>
+    !'Prompt("Download failed: %#0",3,1);>
+      PopTagsandRegisters;StopWorking;Exit;',>
+    !'Prompt("Download successful: %#0",0,1);');
+
+  StopWorking;
+
+  StartWorking('Unzipping %#0...');
+
+  // Create a temp File
+  OpenOutput('%!0\Temp\Unzip.ini');
+  WrL('[UNZIP]');
+  WrL('UNZIP=%#0');
+  WrL('[DESTFOLDER]');
+  WrL('DESTFOLDER=%b\ContribManager\%$(|Package|);');
+  CloseOutput;
+
+  // Unzip the file
+  WinExe('%C\WinEdt-unzip.exe','','%C','',11100);
+  GetExitCode(1);
+  IfNum('%!1',4,'=',>
+    !'Prompt("Unzip failed: %#0",3,1);>
+      PopTagsandRegisters;StopWorking;Exit;',>
+    !'DeleteFile("%b\ContribManager\%#0");');
+  IfStr('%$(|Package|);','bibMacros','=',>
+    !'CopyFile("%b\ContribManager\Install_bibMacros.edt",>
+        "%b\ContribManager\bibMacros\bibMacros\Install.edt",1,1);');
+
+  StopWorking;
+
+  PopTagsandRegisters;
+
+End;

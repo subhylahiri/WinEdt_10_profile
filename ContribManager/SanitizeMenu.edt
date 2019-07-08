@@ -1,0 +1,29 @@
+// Sanitize Contributions submenu
+
+  PushTagsandRegisters;
+
+  Assign("Installing","1");
+
+  StartWorking("Updating...");
+
+  ReadFile("%b\ContribManager\contrib.db",1);
+  LstEnum('%!1','%\');
+  LstGetCount(1);
+  Repeat(%!1,>
+    !'LstGetItem(2,%!c-1);>
+      FindInString("%!2","\(0*\),\(1*\)",-1,-1,11);>
+      Assign("Package","%#0");>
+      Exe("%b\ContribManager\SanitizeSubMenu.edt");>
+      ProcessMessages;>
+     ');
+  LstRelease;
+
+  LoadConfig("ConfigEx\MainMenu.ini");
+
+  StopWorking;
+
+  Release("Installing");
+
+  PopTagsandRegisters;
+
+End;

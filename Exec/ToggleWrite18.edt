@@ -1,0 +1,25 @@
+// ==================================================================
+//
+// Toggle write-18 status
+// ======================
+//
+// This macro toggles the variable 'write18-status'.
+//
+// My customised %b\ConfigEx\StatusBar.ini displays its value in the status bar.
+// My customised %b\Exec\MiKTeX\ExeMode.edt passes this variable to TeX.
+// This option controls TeX's ability to call other programs - a security risk
+// but necessary for \usepackage{epstopdf} to work. It should only be enabled
+// on tex files that you trust.
+// Possible values: disable-write18
+//                  restrict-write18
+//                  enable-write18
+//
+// ==================================================================
+
+  Requires(20100922);
+
+IfStr("%$('write18-status');", "--disable-write18", "=",>
+    "Assign('write18-status','--restrict-write18');",>
+    `IfStr("%$('write18-status');", "--restrict-write18", "=",>
+        "Assign('write18-status','--enable-write18');",>
+        "Assign('write18-status','--disable-write18');");`

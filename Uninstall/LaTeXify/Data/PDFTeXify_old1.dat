@@ -1,0 +1,2 @@
+    !|IfFileExists("%O\%N.bbl",!"DeleteFile('%O\%N.bbl');");>
+      IfFileExists("%O\%N.ind",!"DeleteFile('%O\%N.ind');");>

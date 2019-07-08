@@ -1,0 +1,32 @@
+// Check for all winedt.org updates
+
+  PushTagsandRegisters;
+
+  Assign("UpdateAll","1");
+  Assign("UpdateFound","0");
+
+  ReadFile("%b\ContribManager\contrib.db",1);
+  LstEnum('%!1','%\');
+  LstGetCount(1);
+  Repeat(%!1,>
+    !'LstGetItem(2,%!c-1);>
+      FindInString("%!2","\(0*\),",-1,-1,11);>
+      Assign("Package","%#0");>
+      IfFileExists("%b\Uninstall\%#0\Uninstall.edt",>
+        !`IfFileExists("%b\ContribManager\%#0\DateStamp.dat",>
+          !|Exe("%b\ContribManager\CheckUpdates.edt");|);`);>
+      Release("Package");>
+      ProcessMessages;>
+     ');
+  LstRelease;
+
+  IfStr("%$(|UpdateFound|);","0","=",>
+    !'Prompt("No updates available",0,1);',>
+    !'Prompt("No other updates available",0,1);');
+
+  Release("UpdateAll");
+  Release("UpdateFound");
+
+  PopTagsandRegisters;
+
+End;

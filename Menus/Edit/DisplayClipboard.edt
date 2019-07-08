@@ -1,0 +1,11 @@
+// ==================================================================
+//
+// Display contents of clipboard
+// =============================
+//
+// This macro displays the contents of the windows clipboard.
+//
+// ==================================================================
+
+CopyFromClipboard(9);
+Prompt("%!9", 0, 1);

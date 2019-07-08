@@ -1,0 +1,25 @@
+// Cleanup Uninstall folder
+
+  PushTagsandRegisters;
+
+  SetFolder('%b');
+
+  ListFolderFiles(1,'%b\Uninstall\%$(|Package|);','',1,1);
+  LstEnum('%!1','%\');
+  LstGetCount(1);
+  Repeat(%!1,>
+    !'LstGetItem(2,%!c-1);>
+      DeleteFile("%b\Uninstall\%$(|Package|);\%!2");>
+      LetReg(3,"%b\Uninstall\%$(|Package|);\%!2");>
+      Loop(!`>
+        GetFilePath("%!3",3);>
+        IfStr("%b\Uninstall","%!3",!">=",!"Stop;",>
+          !"RemoveDirectory(|%!3|);>
+            IfOK(!|Relax;|,!|Stop;|);");`);>
+      ProcessMessages;>
+     ');
+  LstRelease;
+
+  PopTagsandRegisters;
+
+End;

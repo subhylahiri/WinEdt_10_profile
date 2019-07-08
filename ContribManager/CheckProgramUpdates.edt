@@ -1,0 +1,49 @@
+// Check for program updates
+
+  PushTagsandRegisters;
+
+  GetAppDataFolder(0,1);
+
+  IfFileExists("%!0\Temp\Download.ini",!"DeleteFile('%!0\Temp\Download.ini');");
+
+  StartWorking('Checking for program updates...');
+
+  // Create a temp File
+  OpenOutput('%!0\Temp\Download.ini');
+  WrL('[DOWNLOAD]');
+  WrL('DOWNLOAD=http://www.winedt.org/datestamps/WinEdt.dat');
+  WrL('[DESTFILE]');
+  WrL('DESTFILE=WinEdt.dat');
+  CloseOutput;
+
+  // Download the file
+  WinExe('%C\WinEdt-download.exe','','%C','',11100);
+  GetExitCode(1);
+  IfNum('%!1',4,'=',>
+    !'Prompt("Unable to connect to the server",3,1);>
+      PopTagsandRegisters;StopWorking;Exit;');
+
+  StopWorking;
+
+  // Check if an update is available
+  GetBuild(2);
+  GetVersion(3);
+  FindInString('%!3','\(0*\)\.\(1*\)',-1,-1,11);
+  ReadFile('%b\ContribManager\WinEdt.dat',4);
+  DeleteFile('%b\ContribManager\WinEdt.dat');
+  FindInString('%!4','WinEdt \(2*\)\.\(3*\) \[Build \(4*\)\]',-1,-1,11);
+
+  IfStr('%#2','%#0','>',>
+    !'Prompt("A new version is available: WinEdt %#2.%#3 (Build %#4)%\%\>
+Installed version: WinEdt %!3 (Build %!2)",0,1);>
+      PopTagsandRegisters;Exit;');
+
+  IfStr('%#4','%!2','>',>
+    !'Prompt("An update is available: WinEdt %#2.%#3 (Build %#4)%\%\>
+Installed version: WinEdt %!3 (Build %!2)",0,1);',>
+     'Prompt("WinEdt is up-to-date%\%\>
+Installed version: WinEdt %!3 (Build %!2)",0,1);');
+
+  PopTagsandRegisters;
+
+End;

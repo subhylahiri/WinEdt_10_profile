@@ -1,0 +1,39 @@
+// ------------------------------------------------------------------
+// Graphics.edt
+// ============
+//
+// Find graphicspath, if it has been set.
+// The string containing the paths is output as "%!9".
+// The Regex for extracting the paths is output as '%!8', using tag \0.
+//      NOTE: '%!8' contains ", so it can't be used as a delimiter for it.
+// FindInString has been called once, with %!7 holding the end location.
+// Syntax for using them:
+//      Exe("%b\Macros\Gather\GraphicsPath.edt");
+//      // FindInString("%!9",'%!8',-11,7,1,%!7);    Already called
+//      WhileOK(!'GetTag(0,6);>
+//        UnixToDos("%!6",6);>
+//        <<<do stuff with %!6>>>;>
+//        <<<do stuff with %P\%!6>>>;>
+//        FindInString("%!9",`%!8`,-11,7,1001,%!7);');
+// ------------------------------------------------------------------
+
+
+  SaveFind;
+  SetFindStr("\\graphicspath\{\(0+{\{*\}}\)\}");
+  SetFindinFilesProject(1);
+  SetRegEx(1);
+  SearchReset;
+  FindInFiles;
+  IfOK("GetFindItem(8,0);","RestoreFind;PopTagsandRegisters;Exit;");
+  RestoreFind;
+
+  FindInString("%!8","\\graphicspath\{\(0+{\{*\}}\)\}",-11,-11,1);
+  IfOK("Relax;","Exit;");
+  GetTag(0,9);
+  LetReg(8,'\{@{"}\(0*\)@{"}\}');
+// LetReg(8,'\{\(0*\)\}');
+
+  FindInString("%!9",'%!8',-11,7,1,%!7);
+
+
+End;

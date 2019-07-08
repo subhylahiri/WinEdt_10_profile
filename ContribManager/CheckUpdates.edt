@@ -1,0 +1,124 @@
+// Check for winedt.org updates
+
+  PushTagsandRegisters;
+
+  GetAppDataFolder(0,1);
+
+  IfFileExists("%!0\Temp\Download.ini",!"DeleteFile('%!0\Temp\Download.ini');");
+
+  // Retrieve the zip path
+  ReadFile("%b\ContribManager\contrib.db",1);
+  FindInString("%!1","%$(|Package|);,\(0*\)>",-1,-1,11);
+  LetReg(5,"%#0");
+  GetVersion(4);
+
+  StartWorking('Checking for updates...');
+
+  // Create a temp File
+  OpenOutput('%!0\Temp\Download.ini');
+  WrL('[DOWNLOAD]');
+  WrL('DOWNLOAD=http://www.winedt.org/datestamps/%!4/%$(|Package|);.dat');
+  WrL('[DESTFILE]');
+  WrL('DESTFILE=%$(|Package|);.dat');
+  CloseOutput;
+
+  // Download the file
+  WinExe('%C\WinEdt-download.exe','','%C','',11100);
+  GetExitCode(1);
+  IfNum('%!1',4,'=',>
+    !'Prompt("Unable to connect to the server",3,1);>
+      PopTagsandRegisters;StopWorking;Exit;');
+
+  StopWorking;
+
+  // Check if an update is available
+  ReadFile('%b\ContribManager\%$(|Package|);\DateStamp.dat',2);
+  ReadFile('%b\ContribManager\%$(|Package|);.dat',3);
+  DeleteFile('%b\ContribManager\%$(|Package|);.dat');
+  FindInString('%!2','*>\(4*\)>',-1,-1,11);
+  FindInString('%!3','\(0*\)>\(1*\)>\(2*\)>\(3*\)>',-1,-1,11);
+
+  IfStr('%#1','%#4','=',>
+    !`IfStr('%$(|UpdateAll|);','1','<>',>
+       !'Prompt("No updates available for %$(|Package|);",0,1);');>
+      PopTagsandRegisters;Exit;`);
+
+  GetBuild(4);
+  IfStr('%#3','%!4','>',>
+    !`IfStr('%$(|UpdateAll|);','1','<>',>
+       !'Prompt("No updates available for %$(|Package|);",0,1);');>
+      PopTagsandRegisters;Exit;`);
+
+  Assign("UpdateFound","1");
+  Prompt("An update is available for %$(|Package|);.%\Do you want to download it?",0,3,>
+    !"Relax;",!"PopTagsandRegisters;Exit;");
+
+  IfFileExists("%!0\Temp\Download.ini",!"DeleteFile('%!0\Temp\Download.ini');");
+  IfFileExists("%!0\Temp\Unzip.ini",!"DeleteFile('%!0\Temp\Unzip.ini');");
+
+  IfStr('%#2','UNINSTALL','=',>
+    !'LetReg(4,"Uninstall the old version before installing the new one");',>
+    !'LetReg(4,"Install the new version over the old one");');
+
+  StartWorking('Downloading %#0...');
+
+  // Create a temp File
+  OpenOutput('%!0\Temp\Download.ini');
+  WrL('[DOWNLOAD]');
+  WrL('DOWNLOAD=http://www.winedt.org/%!5/%#0');
+  WrL('[DESTFILE]');
+  WrL('DESTFILE=%#0');
+  CloseOutput;
+
+  // Download the file
+  WinExe('%C\WinEdt-download.exe','','%C','',11100);
+  GetExitCode(1);
+  IfNum('%!1',4,'=',>
+    !'Prompt("Download failed: %#0",3,1);>
+      PopTagsandRegisters;StopWorking;Exit;',>
+    !'Prompt("Download successful: %#0%\%!4",0,1);');
+
+  StopWorking;
+
+  Exe('%b\ContribManager\Cleanup.edt');
+
+  StartWorking('Unzipping %#0...');
+
+  // Create a temp File
+  OpenOutput('%!0\Temp\Unzip.ini');
+  WrL('[UNZIP]');
+  WrL('UNZIP=%#0');
+  WrL('[DESTFOLDER]');
+  WrL('DESTFOLDER=%b\ContribManager\%$(|Package|);');
+  CloseOutput;
+
+  // Unzip the file
+  WinExe('%C\WinEdt-unzip.exe','','%C','',11100);
+  GetExitCode(1);
+  IfNum('%!1',4,'=',>
+    !'Prompt("Unzip failed: %#0",3,1);>
+      PopTagsandRegisters;StopWorking;Exit;',>
+    !'DeleteFile("%b\ContribManager\%#0");');
+  IfStr('%$(|Package|);','bibMacros','=',>
+    !'CopyFile("%b\ContribManager\Install_bibMacros.edt",>
+        "%b\ContribManager\bibMacros\bibMacros\Install.edt",1,1);');
+
+  StopWorking;
+
+  IfStr('%#2','UNINSTALL','=',>
+    !'Relax;',>
+    !'Exe("%b\ContribManager\CleanupUn.edt");');
+
+  // Sanitize the menu
+  ReadFile("%b\ConfigEx\MainMenu-ContribManager.ini",0);
+
+  SubstituteInString('%!0',>
+    '      CAPTION="%$(|Package|);">      IMAGE="Check">    ITEM',>
+    '      CAPTION="%$(|Package|);">      IMAGE="Maintenance">    ITEM',11);
+
+  WriteFile("%b\ConfigEx\MainMenu-ContribManager.ini","%!0");
+  LoadConfig("ConfigEx\MainMenu.ini");
+
+  PopTagsandRegisters;
+
+End;
