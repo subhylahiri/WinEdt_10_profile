@@ -1,0 +1,23 @@
+// Install bibMacros package
+
+  PushTagsandRegisters;
+
+  ListFolderFiles(1,'%b\ContribManager\bibMacros\bibMacros','',1,1);
+  LstEnum('%!1','%\');
+  LstGetCount(1);
+  Repeat(%!1,>
+    !'LstGetItem(2,%!c-1);>
+      CopyFile("%b\ContribManager\bibMacros\bibMacros\%!2",>
+        "%b\Macros\LaTeX\bibMacros\%!2",1,1);>
+      ProcessMessages;>
+     ');
+  LstRelease;
+
+  Exe('%b\Macros\LaTeX\bibMacros\_Install.edt');
+
+  CopyFile("%b\ContribManager\Uninstall_bibMacros.edt",>
+    "%b\Uninstall\bibMacros\Uninstall.edt",1,1);
+
+  PopTagsandRegisters;
+
+End;
