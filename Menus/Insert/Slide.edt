@@ -1,0 +1,95 @@
+// Insert a slide (Mode Dependent)
+
+ SetTracking(0);
+
+IfisMode('PPR','%!m',!'JMP("PPR");');
+IfisMode('PST','%!m',!'JMP("PST");');
+IfisMode('BMR','%!m',!'JMP("BMR");');
+IfisMode('TeX','%!m',!'JMP("TeX");');
+
+JMP('Default');
+
+:TeX:: ------------------------------------------
+  BeginGroup;
+  SetSel(0);
+  Mark(1);
+  LetReg(0,"%c");
+  TrimLine;
+  CMD('Go To End Of Line');
+  IfNum(%!0,%c,'<','Goto(1);InsLine;Goto(1);'); // Not at the end of line!
+  TrackCaret;
+  ReadFile("%b\Templates\LaTeX\Slide.ltx",9);
+  CMD("Go To Beginning Of Line");
+  Mark(1);
+  InsText("%!9");
+  Goto(1,1);
+  CMD("Next Bullet");
+  EndGroup;
+  JMP("Exit");
+
+:BMR:: -----------------------------------------
+  BeginGroup;
+  SetSel(0);
+  Mark(1);
+  LetReg(0,"%c");
+  TrimLine;
+  CMD('Go To End Of Line');
+  IfNum(%!0,%c,'<','Goto(1);InsLine;Goto(1);'); // Not at the end of line!
+  TrackCaret;
+  ReadFile("%b\Templates\LaTeX\SlideBMR.ltx",9);
+  CMD("Go To Beginning Of Line");
+  Mark(1);
+  InsText("%!9");
+  Goto(1,1);
+  CMD("Next Bullet");
+  EndGroup;
+  JMP("Exit");
+
+:PST:: -----------------------------------------
+  BeginGroup;
+  SetSel(0);
+  Mark(1);
+  LetReg(0,"%c");
+  TrimLine;
+  CMD('Go To End Of Line');
+  IfNum(%!0,%c,'<','Goto(1);InsLine;Goto(1);'); // Not at the end of line!
+  TrackCaret;
+  ReadFile("%b\Templates\LaTeX\SlidePST.ltx",9);
+  CMD("Go To Beginning Of Line");
+  Mark(1);
+  InsText("%!9");
+  Goto(1,1);
+  CMD("Next Bullet");
+  EndGroup;
+  JMP("Exit");
+
+:PPR:: -----------------------------------------
+  BeginGroup;
+  SetSel(0);
+  Mark(1);
+  LetReg(0,"%c");
+  TrimLine;
+  CMD('Go To End Of Line');
+  IfNum(%!0,%c,'<','Goto(1);InsLine;Goto(1);'); // Not at the end of line!
+  TrackCaret;
+  ReadFile("%b\Templates\LaTeX\SlidePPR.ltx",9);
+  CMD("Go To Beginning Of Line");
+  Mark(1);
+  InsText("%!9");
+  Goto(1,1);
+  CMD("Next Bullet");
+  CMD("Next Bullet");
+  EndGroup;
+  JMP("Exit");
+
+:Default:: --------------------------------------
+// No Default format ...
+
+  Prompt('No Slide Format is defined for mode: "%!m"!');
+
+:Exit:: -----------------------------------------
+// It's OK
+ SetTracking(1);
+
+
+End;

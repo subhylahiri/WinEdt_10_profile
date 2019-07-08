@@ -1,0 +1,5 @@
+Assign("Old-BibTeX-Executable","%$('BibTeX-Executable');");
+Assign("BibTeX-Executable","biber.exe");
+Exe('%b\Exec\TeX\PDFTeXify.edt');
+Assign("BibTeX-Executable","%$('Old-BibTeX-Executable');");
+Release("Old-BibTeX-Executable");

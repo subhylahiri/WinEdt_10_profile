@@ -1,0 +1,63 @@
+// -*- ASCII:EDT -*-
+// _Uninstall.edt
+// uninstallation macro for the bibMacros package
+// -----------------------------------------------------
+
+Requires(20120317);
+
+Prompt("This will uninstall the bibMacros package. Continue?",1,0,"","Exit;");
+PushTagsandRegisters;
+Assign("BM_uninstall");
+
+JMP("start");
+:do_menu::
+IfFileExists("%$('BM_file');",!`>
+   ReadFile("%$('BM_file');",0);>
+   LetRegNum(2,-1);>
+   LetRegNum(9,0);>
+   Loop(!">
+      FindInString('%!0','</%_/ \@Begin: bibMacros>\(0<**>\)</%_/ \@End: bibMacros>',1,2,1001,%!2);>
+      IfOK(!'>
+         FindInString(''%#0'',''</%_/ \@Begin: ORIGINAL>\(1<**>\)</%_/ \@End: ORIGINAL>'',3,4,11);>
+         IfOK(!''SubstituteInString(""%#1"",""/%_/ "","""",0,3);'',''LetReg(3,"""");'');>
+         ReplaceInString(''%!0'',''%!3'',%!1,%!2,0,0);>
+         LetRegNum(9,%!9+1);','Stop;');");>
+   IfNum(%!9,0,">",!">
+      WriteFile('%$(|BM_file|);','%!0');>
+      LoadConfig('%$(|BM_file|);');>
+      Assign('BM_uninstall','%$(|BM_uninstall|);%\*  Removed %!9 addition(s) in ""%$(|BM_file|);""');");`);
+Return;
+
+:do_cite::
+   IfFileExists("%$('BM_file');",!">
+      ReadFile('%$(|BM_file|);',0);>
+      FindInString('%!0','(bibMacros)',1,2,0);>
+      IfOK(!'>
+         DeleteFile(''%$(|BM_file|);'');>
+         Assign(''BM_uninstall'',''%$(|BM_uninstall|);%\*  Deleted file ""%$(|BM_file|);"");'');');");
+Return;
+
+:start::
+Assign("BM_file","%b\ConfigEx\MainMenu.ini");
+Call("do_menu");
+Assign("BM_file","%b\ConfigEx\PopupMenus.ini");
+Call("do_menu");
+Assign("BM_file","%b\Macros\Active Strings\Cite.edt");
+Call("do_cite");
+Assign("BM_file","%b\Macros\Active Strings\Cite-sel.edt");
+Call("do_cite");
+Assign("BM_file","%b\Macros\Active Strings\Cite-cont.edt");
+Call("do_cite");
+IfFileExists("%b\ConfigEx\bibMacros.ini",!">
+   DeleteFile('%b\ConfigEx\bibMacros.ini');>
+   Assign('BM_uninstall','%$(|BM_uninstall|);%\*  Deleted file ""%b\ConfigEx\bibMacros.ini""');");
+
+IfFileExists("%b\ConfigEx\UserPreferences.ini",!'LoadConfig("%b\ConfigEx\UserPreferences.ini");');
+IfFileExists("%b\ConfigEx\Private.ini",!'LoadConfig("%b\ConfigEx\Private.ini");');
+
+PopTagsandRegisters;
+
+Prompt("The bibMacros package has been uninstalled.%\%$('BM_uninstall');%\%\>
+Finish uninstallation by deleting the directory ""%b\Macros\LaTeX\bibMacros"".");
+
+End;

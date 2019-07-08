@@ -1,0 +1,3 @@
+IfStr("%$('BibTeX-Executable');", "bibtex.exe", "=",>
+    "Assign('BibTeX-Executable','biber.exe');",>
+    "Assign('BibTeX-Executable','bibtex.exe');");

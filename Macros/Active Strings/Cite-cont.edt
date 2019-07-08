@@ -1,0 +1,7 @@
+// !Mode:: "ASCII:EDT"
+// Auto Response to: \cite{?},,
+// (bibMacros)
+
+Assign("BM_findEntry_active","cite-cont");
+Exe("%b\Macros\LaTeX\bibMacros\Find Entry.edt");
+End;

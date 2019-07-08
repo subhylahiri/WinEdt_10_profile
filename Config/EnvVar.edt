@@ -1,0 +1,29 @@
+// Environment Variables
+
+  Assign(!"UseEnvVar-1", !"1");
+  Assign(!"EnvVar-1",!"TEXINPUTS");
+  Assign(!"EnvVal-1",!"%@('USERPROFILE');\MikTeX-local;%@('USERPROFILE');\MikTeX-local\tex\latex;");
+  SetEnvVar(!"TEXINPUTS","%@('USERPROFILE');\MikTeX-local;%@('USERPROFILE');\MikTeX-local\tex\latex;");
+
+  Assign(!"UseEnvVar-2", !"1");
+  Assign(!"EnvVar-2",!"BIBINPUTS");
+  Assign(!"EnvVal-2",!"%@('USERPROFILE');\MikTeX-local\bibtex\bib;%@('USERPROFILE');\MikTeX-local\bibtex\bst");
+  SetEnvVar(!"BIBINPUTS","%@('USERPROFILE');\MikTeX-local\bibtex\bib;%@('USERPROFILE');\MikTeX-local\bibtex\bst");
+
+  Release(!"UseEnvVar-3");
+  Assign(!"EnvVar-3",!"MIKTEX_EDITOR");
+  Assign(!"EnvVal-3",!"WinEdt.exe ""[Open(|%%f|);SelPar(%%l,7);]""");
+
+  Release(!"UseEnvVar-4");
+  Assign(!"EnvVar-4",!"TEXEDIT");
+  Assign(!"EnvVal-4",!"WinEdt.exe ""[Open(|%%s|);SelPar(%%d,7);]""");
+
+  Release(!"UseEnvVar-5");
+  Release(!"EnvVar-5");
+  Release(!"EnvVal-5");
+
+  Release(!"UseEnvVar-6");
+  Release(!"EnvVar-6");
+  Release(!"EnvVal-6");
+
+End;
