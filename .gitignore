@@ -1,0 +1,13 @@
+*.log
+/*.dat
+*.dnt
+*.bak
+*.prj
+Config/PDFAutoDetect.edt
+MUI/
+ConfigEx/UserPreferences.ini
+Exec/Config.edt
+Dict/Temp/*.*
+Dict/Temp/LaTeX User Commands Arg.dic
+Dict/Temp/LaTeX User Environments.dic
+Dict/Temp/LaTeX User Commands.dic

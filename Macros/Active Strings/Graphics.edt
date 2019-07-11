@@ -1,0 +1,68 @@
+// ------------------------------------------------------------------
+// Graphics.edt
+// ============
+//
+// Use ShellExecute for active string: \includegraphics?{?}
+// If the graphics is associated with any application it gets opened
+// Define double-click response for \includegraphics?{?}
+//     [Exe("%b\Macros\Active Strings\Graphics.edt");]
+// ------------------------------------------------------------------
+
+  PushTagsandRegisters;
+
+  // Prompt('%?');
+  UnixToDos("%?", 3);  // Convert the UNIX PATH (if necessary)
+  GetFilePath("%!3",4);
+
+  // Try specification relative to the Main File if full PATH is missing
+  IfStr("%!4","","=",!"LetReg(2,'%P\');",!"LetReg(4,'%!4\');LetReg(2,'%!4');");
+  IfFileExists("%!2",!"Relax;",!"LetReg(2,'%P\%!4');");
+  Call("Exists");
+//============================================================================
+  // If you have defined special PATH for graphics try your graphics folder(s)
+  // WinEdt does not know about your special directories...
+  Exe("%b\Macros\Gather\GraphicsPath.edt");
+  WhileOK(!`GetTag(0,6);>
+    UnixToDos("%!6",6);>
+    IfFileExists("%!6%!4",!"LetReg(2,'%!6%!4');Call('Exists');");>
+    IfFileExists("%P\%!6%!4",!"LetReg(2,'%P\%!6%!4');Call('Exists');");>
+    IfFileExists("%P\%!6",!"LetReg(2,'%P\%!6');Call('Exists');");>
+    FindInString('%!9','%!8',-11,7,1001,%!7);`);
+  Prompt('Graphics file ""%!3"" not found!');
+  PopTagsandRegisters;
+  Exit;
+
+// ==================================================================
+:Exists::
+  GetFileName("%!3",0);
+  LetReg(1,"%!2%!0");
+  GetFileType("%!3",0);
+  LetReg(1,"%!1%!0");
+
+  LetReg(0,"%!1");
+  // Try common extensions (if needed)
+  // Relax; can be replaced by a direct call to executable
+  // (eg. "Run('My favorite viewer.exe ""%!0""');Exit;")...
+  IfFileExists("%!0",!"JMP('Success');",!"LetReg(0, '%!1.svg');");
+  IfFileExists("%!0",!"JMP('Success');",!"LetReg(0, '%!1.eps');");
+  IfFileExists("%!0",!"JMP('Success');",!"LetReg(0, '%!1.pdf');");
+  IfFileExists("%!0",!"JMP('Success');",!"LetReg(0, '%!1.png');");
+  IfFileExists("%!0",!"JMP('Success');",!"LetReg(0, '%!1.jpg');");
+  IfFileExists("%!0",!"JMP('Success');",!"LetReg(0, '%!1.jpeg');");
+  IfFileExists("%!0",!"JMP('Success');",!"LetReg(0, '%!1.ps');");
+  IfFileExists("%!0",!"JMP('Success');",!"LetReg(0, '%!1.bmp');");
+  // etc... for your common graphics formats in your preferred order
+  IfFileExists("%!0",!"JMP('Success');",!"Return;");
+// ==================================================================
+
+:Success::
+  ShellExecute("Open","%!0","","%P",1);
+  // Cleanup
+  LetReg(0,"");
+  LetReg(1,"");
+  LetReg(2,"");
+  LetReg(3,"");
+
+  PopTagsandRegisters;
+
+End;

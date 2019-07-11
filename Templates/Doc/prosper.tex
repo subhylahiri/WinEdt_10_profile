@@ -1,0 +1,109 @@
+% -*- TeX -*- -*- UK -*- -*- PPR -*-
+% ----------------------------------------------------------------
+% Prosper presentation ************************************************
+%
+% Subhaneil Lahiri's template
+%
+% To compile:
+%   Ctrl-Shift-P
+% or
+%   Menu: Accessories - Prosper Slide
+% or
+%   latex/texify
+%   dvips
+%   ps2pdf
+% **** -----------------------------------------------------------
+\documentclass[%
+pdf, %%%% For projecting
+%ps,accumulate, %%%%% For printing
+%nocolorBG,
+colorBG, slideColor,
+%slideBW,
+%draft,
+total,
+%%%% Styles: %%%%%
+%frames
+%azure
+%blends
+%prettybox
+serpaggi
+%contemporain
+%nuancegris
+%troispoints
+%lignesbleues
+%darkblue
+%alienglow
+%autumn
+%
+]{prosper}
+
+
+%---------Packages-------------------------------------------------------
+
+%\usepackage{prosper} % Just to make documentation easier to find
+%\usepackage{xcolor}
+\usepackage[centertags]{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{pstricks,pst-node,pst-text,pst-3d}
+\usepackage{pstricks-add}
+
+%---------Colours---------------------------------------------------------
+
+% \newrgbcolor{LemonChiffon}{1. 0.98 0.8}
+% \newrgbcolor{myellow}{.9 .8 .1}
+% \newrgbcolor{myblue}{.2 .36 .77}
+% \newrgbcolor{orange}{0.8 0.7 0.2}
+% \newrgbcolor{myred}{0.95 0.0 0.0}
+ \newrgbcolor{darkgrey}{.5 .5 .5}
+
+%---------Commands-------------------------------------------------------
+
+\renewcommand{\slidebottommargin}{0.5in}
+\renewcommand{\slidetopmargin}{0.8in}
+\renewcommand{\paperwidth}{210mm}
+
+\newcommand{\rref}[1]{\hfill {\fontsize{10pt}{10pt}\selectfont\darkgrey [#1]}}
+\newcommand{\rrref}[1]{{\fontsize{8pt}{8pt}\selectfont\darkgrey #1}}
+
+
+\input{mydefs.tex}
+\input{newsymb.tex}
+
+
+%---------Title-----------------------------------------------------------
+
+\title {}
+%
+%\subtitle{}
+%
+\author{}
+%
+\institution{%
+
+}
+%
+%\slideCaption{}
+
+%---------Beginning--------------------------------------------------------
+
+\begin{document}
+\maketitle
+
+
+%-------------Slide--------------------------------------------------------
+
+%\overlays{}{
+\begin{slide}{}
+%
+ 
+%
+\end{slide}
+%}
+
+
+% Press Ctrl-D to insert a new slide
+
+%-----End----------------------------------------------------------------
+
+\end{document}
