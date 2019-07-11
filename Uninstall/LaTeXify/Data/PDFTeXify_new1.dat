@@ -1,0 +1,4 @@
+    !|IfFileExists("%O\%N.bbl",!"DeleteFile('%O\%N.bbl');");>
+      IfFileExists("%O\%N.bcf",!"DeleteFile('%O\%N.bcf');");>
+      IfFileExists("%O\%N.run.xml",!"DeleteFile('%O\%N.run.xml');");>
+      IfFileExists("%O\%N.ind",!"DeleteFile('%O\%N.ind');");>

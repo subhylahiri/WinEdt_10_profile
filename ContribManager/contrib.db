@@ -1,0 +1,30 @@
+Acronym,config/tree
+ANSI2UTF8,macros/text
+arara,config/menus
+Asymptote,config/menus
+bibMacros,macros/latex
+ChkTeX,config/menus
+ConTeXt standalone,macros/latex
+DocZoom,macros/winedt
+dvi2pic,config/menus
+FasTeX,macros/latex
+Floats,config/tree
+IntelliMath,macros/latex
+JabRef,config/menus
+latexdiff,config/menus
+LaTeXify,config/menus
+latexindent,config/menus
+Ligatures-German,macros/latex
+MathGreek,config/menus
+MetaPreview,macros/latex
+Nomenclature,config/menus
+PostScript,config/modes
+PythonTeX,config/menus
+RManager,config/modes
+SmarterQuotes,macros/latex
+Stata-support,config/modes
+ToDo,config/tree
+ToggleComment,macros/text
+VerbatimPlus,config/modes
+YandY TeX,config/modes
+ContribManager,macros/winedt

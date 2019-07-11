@@ -1,0 +1,58 @@
+// Sanitize Contributions submenu
+
+  PushTagsandRegisters;
+
+  ReadFile("%b\ConfigEx\MainMenu-ContribManager.ini",0);
+
+  IfStr("%$(|Old-INI|);","","=",!"JMP('Updating');");
+
+:Installing:: =======================================================
+
+  FindInString("%$(|Old-INI|);",>
+    '    CAPTION="Show Installed Only">    IMAGE="Check">    MACRO',>
+    -1,-1,11);
+  IfOK(!`SubstituteInString('%!0',>
+         '    CAPTION="Show Installed Only">    MACRO',>
+         '    CAPTION="Show Installed Only">    IMAGE="Check">    MACRO',11);`);
+
+  FindInString("%$(|Old-INI|);",>
+    '      CAPTION="%$(|Package|);">      IMAGE="Maintenance">    ITEM',>
+    -1,-1,11);
+  IfOK(!`SubstituteInString('%!0',>
+         '      CAPTION="%$(|Package|);">    ITEM',>
+         '      CAPTION="%$(|Package|);">      IMAGE="Maintenance">    ITEM',11);>
+         JMP('Sanitized');`);
+
+  IfFileExists("%b\Uninstall\%$(|Package|);\Uninstall.edt",>
+    !`SubstituteInString('%!0',>
+      '      CAPTION="%$(|Package|);">    ITEM',>
+      '      CAPTION="%$(|Package|);">      IMAGE="Check">    ITEM',11);`);
+  JMP('Sanitized');
+
+:Updating:: =========================================================
+
+  IfFileExists("%b\Uninstall\%$(|Package|);\Uninstall.edt",>
+    !`SubstituteInString('%!0',>
+      '      CAPTION="%$(|Package|);">    ITEM',>
+      '      CAPTION="%$(|Package|);">      IMAGE="Check">    ITEM',11);>
+      SubstituteInString('%!0',>
+      '      CAPTION="%$(|Package|);">      IMAGE="Maintenance">    ITEM',>
+      '      CAPTION="%$(|Package|);">      IMAGE="Check">    ITEM',11);`,>
+    !`SubstituteInString('%!0',>
+      '      CAPTION="%$(|Package|);">      IMAGE="Check">    ITEM',>
+      '      CAPTION="%$(|Package|);">    ITEM',11);`);
+
+:Sanitized:: ========================================================
+
+  FindInString("%!0",>
+    '    CAPTION="Show Installed Only">    IMAGE="Check">    MACRO',-1,-1,11);
+  IfOK(!`SubstituteInString('%!0',>
+         '      CAPTION="%$(|Package|);">    ITEM',>
+         '      CAPTION="%$(|Package|);">      INVISIBLE=1>    ITEM',11);`);
+
+  WriteFile("%b\ConfigEx\MainMenu-ContribManager.ini","%!0");
+  IfStr("%$(|Installing|);","","=",!"LoadConfig('ConfigEx\MainMenu.ini');");
+
+  PopTagsandRegisters;
+
+End;

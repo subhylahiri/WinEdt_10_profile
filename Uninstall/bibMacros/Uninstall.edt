@@ -1,0 +1,26 @@
+// Uninstall bibMacros package
+
+  PushTagsandRegisters;
+
+  Exe('%b\Macros\LaTeX\bibMacros\_Uninstall.edt');
+
+  ListFolderFiles(1,'%b\Macros\LaTeX\bibMacros','',1,1);
+  LstEnum('%!1','%\');
+  LstGetCount(1);
+  Repeat(%!1,>
+    !'LstGetItem(2,%!c-1);>
+      DeleteFile("%b\Macros\LaTeX\bibMacros\%!2");>
+      ProcessMessages;>
+     ');
+  LstRelease;
+
+  RemoveDirectory('%b\Macros\LaTeX\bibMacros');
+  RemoveDirectory('%b\Macros\LaTeX');
+  RemoveDirectory('%b\Macros');
+  DeleteFile("%b\Uninstall\bibMacros\Uninstall.edt");
+  RemoveDirectory('%b\Uninstall\bibMacros');
+  RemoveDirectory('%b\Uninstall');
+
+  PopTagsandRegisters;
+
+End;

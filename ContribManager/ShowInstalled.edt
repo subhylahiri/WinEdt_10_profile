@@ -1,0 +1,43 @@
+// Toggle the visualization of non-installed Contributions
+
+  PushTagsandRegisters;
+
+  StartWorking("Updating...");
+
+  ReadFile("%b\ConfigEx\MainMenu-ContribManager.ini",0);
+  ReadFile("%b\ContribManager\contrib.db",1);
+
+  LstEnum('%!1','%\');
+  LstGetCount(1);
+  Repeat(%!1,>
+    !|LstGetItem(2,%!c-1);>
+      FindInString("%!2","\(0*\),\(1*\)",-1,-1,11);>
+      FindInString("%!0",>
+        '    CAPTION="Show Installed Only">    MACRO',-1,-1,11);>
+      IfOK(!`SubstituteInString('%!0',>
+             '      CAPTION="%#0">    ITEM',>
+             '      CAPTION="%#0">      INVISIBLE=1>    ITEM',11);`,>
+           !`SubstituteInString('%!0',>
+             '      CAPTION="%#0">      INVISIBLE=1>    ITEM',>
+             '      CAPTION="%#0">    ITEM',11);`);>
+      ProcessMessages;>
+     |);
+  LstRelease;
+
+  FindInString("%!0",>
+    '    CAPTION="Show Installed Only">    MACRO',-1,-1,11);>
+  IfOK(!`SubstituteInString('%!0',>
+         '    CAPTION="Show Installed Only">    MACRO',>
+         '    CAPTION="Show Installed Only">    IMAGE="Check">    MACRO',11);`,>
+       !`SubstituteInString('%!0',>
+         '    CAPTION="Show Installed Only">    IMAGE="Check">    MACRO',>
+         '    CAPTION="Show Installed Only">    MACRO',11);`);>
+
+  WriteFile("%b\ConfigEx\MainMenu-ContribManager.ini","%!0");
+  LoadConfig("ConfigEx\MainMenu.ini");
+
+  StopWorking;
+
+  PopTagsandRegisters;
+
+End;

@@ -1,0 +1,18 @@
+// Open winedt.org web page
+
+  PushTagsandRegisters;
+
+  ReadFile("%b\ContribManager\contrib.db",0);
+  FindInString("%!0","%$(|Package|);,\(0*\)>",-1,-1,11);
+  LetReg(1,"%#0");
+  LetReg(0,"%$(|Package|);");
+
+  // Problematic package?
+  SubstituteInString("%!0"," s","S",10);
+  SubstituteInString("%!0"," ","",0);
+
+  ShellExecute("Open","http://www.winedt.org/%!1/%!0.html");
+
+  PopTagsandRegisters;
+
+End;

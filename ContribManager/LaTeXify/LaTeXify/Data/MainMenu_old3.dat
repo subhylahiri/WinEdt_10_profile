@@ -1,0 +1,3 @@
+    MACRO="ShowErrorLog(-1);"
+    SHORTCUT="24645::Shift+Ctrl+E"
+  ITEM="-"

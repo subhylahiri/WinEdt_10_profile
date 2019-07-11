@@ -1,3 +1,3 @@
-My WinEdt 9 profile
+My WinEdt 10 profile
 
 Contains shortcuts, menus, active strings, dictionaries, etc

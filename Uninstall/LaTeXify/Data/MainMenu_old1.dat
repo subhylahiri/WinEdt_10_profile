@@ -1,0 +1,7 @@
+  ITEM="-"
+  ITEM="BibTeX"
+    CAPTION="&BibTeX"
+    IMAGE="BibTeX"
+    MACRO="Exe('%b\Exec\TeX\BibTeX.edt');"
+    SHORTCUT="24642::Shift+Ctrl+B"
+    REQ_FILTER=:%O\%N.aux*"%!M=TeX"|"%!M=TeX:STY"|"%!M=TeX:AUX"

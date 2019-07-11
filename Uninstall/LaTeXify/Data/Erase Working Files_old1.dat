@@ -1,0 +1,2 @@
+    AddFileItem(1,"BBL Files","*.bbl","TeX");
+    AddFileItem(1,"BLG Files","*.blg","TeX");
