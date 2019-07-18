@@ -252,7 +252,7 @@
 
 // PDFTeXify
     Assign(!"PDFTeXify-Executable", !|%@("PDFLATEX");|);
-    Release(!"PDFTeXify-Switches");
+    Assign(!"PDFTeXify-Switches", !|%$('write18-status');|);
     Assign(!"PDFTeXify-Parameters", !|"%N%T"|);
     Release(!"PDFTeXify-Paper_Size");
     Release(!"PDFTeXify-Paper_Custom_Size");

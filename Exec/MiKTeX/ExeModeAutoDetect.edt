@@ -27,8 +27,13 @@
 
   Assign(!"Max-TeXify-Iterations", !"3");
   Assign(!"PDFTeXify-Method", !"0");
-  Assign(!"CS-Output", !"0");
 
   SetEnvVar("PDFLATEX",!"pdflatex.exe");
+  SetEnvVar("LATEX",!"latex.exe");
+
+  Assign(!"CS-Output", !"0");
+  Assign(!"Compile-UseSelectedTeXEngine", !"1");
+  Assign(!"Compile-UsePragmaComments", !"1");
+  Assign(!"Compile-UseBatchFile", !"0");
 
 End;
