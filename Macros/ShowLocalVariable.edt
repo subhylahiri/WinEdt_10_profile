@@ -1,0 +1,11 @@
+// ==================================================================
+//
+// Display contents of Local Variables
+// ===================================
+//
+// This macro asks for the name of a local variable, then displays it
+//
+// ==================================================================
+
+GetString( "Name of variable:", "Display Local Variable", "" );
+Prompt("%$(@'%!?');", 0, 1);
