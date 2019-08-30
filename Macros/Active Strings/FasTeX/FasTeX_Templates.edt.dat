@@ -4,10 +4,15 @@
 // string name to %b\ConfigEx\FasTeX.ini script.
 
 tebd
+% -*- TeX -*- -*- UK -*-
+% ----------------------------------------------------------------
+% !TEX program = pdflatex
+% !BIB program = bibtex
+% **** -----------------------------------------------------------
 \documentclass[11pt]{article}
 % Preamble:
-\input{sl_preamble.tex}
-\input{sl_graphics_preamble.tex}
+\usepackage{sl-preamble}
+\usepackage[margin=1.5in]{geometry}
 %
 % ----------------------------------------------------------------
 \vfuzz2pt % Don't report over-full v-boxes if over-edge is small
@@ -16,10 +21,10 @@ tebd
 %\renewcommand{\baselinestretch}{1.5}
 % ----------------------------------------------------------------
 % New commands etc.
-\input{sl_definitions.tex}
-\input{sl_symbols.tex}
 %
+%================================================================================
 \begin{document}
+%================================================================================
 -tebd-
 
 temar
@@ -44,6 +49,7 @@ Author2
    \\State University of ... }
 \date{put in custom date; delete this line for today's date}
 \maketitle
+%================================================================================
 -teaut-
 
 teabs
@@ -51,6 +57,25 @@ teabs
 Text goes here
 \end{abstract}
 -teabs-
+
+tebibx
+%================================================================================
+\bibliographystyle{utcaps_sl}
+\bibliography{journals}
+%================================================================================
+\end{document}
+-tebibx-
+
+teblx
+%--------------------------------------------------------------------------------
+\usepackage[style=numeric-links,language=british]{biblatex}
+\ExecuteBibliographyOptions{sorting=none,giveninits=true,maxbibnames=99,uniquename=init}
+\DeclareNameAlias{author}{default}
+%\renewcommand{\mkbibnamegiven}[1]{}
+\addbibresource{journals.bib}
+\setlength{\bibitemsep}{\parsep}
+%--------------------------------------------------------------------------------
+-teblx-
 
 teref
 \section*{References}
