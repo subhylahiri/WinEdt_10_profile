@@ -1,0 +1,87 @@
+// -*- ASCII:EDT -*-
+// ==================================================================
+//
+// Response to insert ref from menu/shortcut
+// =========================================
+//
+// The reference command should be in Reg %!9 , excluding argument braces.
+// Reg %!8 contains the bit after the command.
+//
+// Inserts %!9
+// If nothing was selected:
+//    If %!8='':
+//      Inserts '{}'.
+//      Calls active string macro.
+//    Else:
+//      Inserts %!8.
+//      Cursor is placed after the command, before %!8.
+//      Calls active string macro.
+// If something was selected:
+//    It is placed in braces after the command.
+//    If %!8<>'':
+//      Cursor is placed after the command, before braced selection.
+//      Calls active string macro.
+//
+// Special handling of \hyperref: %!9 = '\hyperref[]', %!8 = '{*}'
+// ==================================================================
+
+PushTagsandRegisters;
+Assign("ref-command", "%!9");
+Assign("ref-post", "%!8");
+Assign("ref-active", "Ref");
+
+FindInString('%$("ref-command")', 'cite', -11, -11, 0 );
+IfOK(!'Assign("ref-active", "Cite");');
+
+FindInString('%$("ref-command")', 'label', -11, -11, 0 );
+IfOK(!'Assign("ref-active", "Label");');
+
+FindInString('%$("ref-command")', 'ref', -11, -11, 0 );
+IfOK(!'Assign("ref-active", "Ref");');
+
+IfFileExists('%b\Macros\Active Strings\%$("ref-active");.edt',>
+    !'Assign("ref-active", "%b\Macros\Active Strings\%$(`ref-active`);.edt");',>
+    !'Assign("ref-active", "%B\Macros\Active Strings\%$(`ref-active`);.edt");');
+
+
+
+JMP("Start");   // Skip procedures
+
+
+:NoSel:: ============================================================
+    Ins('%$("ref-command")');
+    IfStr('%$("ref-post")', '', '<>', !'Call("WithPost");', !'Ins("{}");');
+    Exe('%$("ref-active")');
+    Return;
+
+:WithPost:: =========================================================
+// Special handling of \hyperref[]{}
+    GetLength(7, '%$("ref-post")');
+    Ins('%$("ref-post")');
+    CharLeft(%!7);
+    Return;
+
+:WithSel:: ==========================================================
+    InsLabel('%$("ref-command")','{','}');
+    IfStr('%$("ref-post")', '', '<>', !'Call("SelPost");');
+    Return;
+
+:SelPost:: ==========================================================
+// Special handling of \hyperref[]{}
+    GetLength(7, '%$("ref-command")');
+    SwapCaretSelect(-1);
+    CharRight(%!7);
+    Exe('%$("ref-active")');
+    Return;
+
+:Start:: ============================================================
+
+IfSel(2,'>','SetSel(0);');
+IfSel('0','=', !'Call("NoSel");', !'Call("WithSel");');
+
+Release("ref-command");
+Release("ref-post");
+Release("ref-active");
+PopTagsandRegisters;
+
+End;
