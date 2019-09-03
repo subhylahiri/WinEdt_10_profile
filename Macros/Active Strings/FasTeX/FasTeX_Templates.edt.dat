@@ -60,7 +60,7 @@ Text goes here
 
 tebibx
 %================================================================================
-\bibliographystyle{utcaps_sl}
+\bibliographystyle{utcaps_nat}
 \bibliography{journals}
 %================================================================================
 \end{document}

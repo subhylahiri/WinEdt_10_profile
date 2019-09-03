@@ -76,8 +76,10 @@ JMP("Start");   // Skip procedures
 
 :Start:: ============================================================
 
+BeginGroup;
 IfSel(2,'>','SetSel(0);');
 IfSel('0','=', !'Call("NoSel");', !'Call("WithSel");');
+EndGroup;
 
 Release("ref-command");
 Release("ref-post");
