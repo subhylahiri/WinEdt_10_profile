@@ -1,0 +1,32 @@
+// ===============================================================================
+// -*- ASCII:EDT -*-
+// Auto Complete: Insert LaTeX command with arguments eg. \label{}
+// ===============================================================================
+
+Requires(20150217);
+
+// ===============================================================================
+// Input Parameters:
+// =================
+// %?  - \command{}
+//
+// AutoPopup event handler calls this macro and inserts the resulting string: %?
+// and executes an additional macro %!? if set to non-empty string ...
+// ===============================================================================
+
+//SubstituteInString('%?',!'\{*\}','\{\}',11,-10);
+
+FindInString('%?',':@[NcnefovVxTFpwD]',8,9,11);
+ExtractByIndex(-10,'%?','%!8','%!9');
+SubstituteInString('%-0',':',' =',0,-1);
+SubstituteInString('%-1','[NVw]',' ',11,-10);
+SubstituteInString('%-0','[cnefovxTF]',' {  }',11,-1);
+SubstituteInString('%-1','p',' #',11,-10);
+// This will be inserted by the event handler
+LetTempReg("%?%-0");
+// No need to execute anything after
+LetTempReg(!"",!"!");
+
+End;
+
+// ===============================================================================
