@@ -1,0 +1,20 @@
+// @BEGIN: HTML
+IfisMode('HTML;XML;PHP;HHC','%!m',!'InsLabel("<!","--","-->");Exit;');
+// @END: HTML
+
+// @BEGIN: DTX
+IfisMode('DTX','%!m',>
+  !'SetTracking(0,-1);MarkSelection(1,2);GoToBeginningOfLine;SelCharRight;>
+    IfStr("%S","%","=",>
+      !|RestoreSelection(1,2,1);>
+        IfNum(%l,%y,"=",>
+          !"InsertString(`^^A`);",>
+          !"RemoveComment;InsertString(`^^A`);InsertComment;");|,>
+      !"RestoreSelection(1,2,1);InsertComment;");>
+    SetTracking(1,0);Exit;');
+// @END: DTX
+
+// @DEFAULT
+InsertComment;
+
+End;
