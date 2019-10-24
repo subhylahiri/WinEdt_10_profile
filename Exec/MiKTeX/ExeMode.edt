@@ -90,7 +90,7 @@
     Release(!"PDFLaTeX-Warnings");
     Release(!"PDFLaTeX-ExitCode");
     Assign(!"PDFLaTeX-Viewer", !|1|);
-    Assign(!"PDFLaTeX-View_Search", !|1|);
+    Release(!"PDFLaTeX-View_Search");
     Release(!"PDFLaTeX-STD_IO");
     Release(!"PDFLaTeX-No_Interaction");
     Release(!"PDFLaTeX-C-style-errors");
@@ -265,7 +265,7 @@
     Release(!"PDFTeXify-Warnings");
     Release(!"PDFTeXify-ExitCode");
     Assign(!"PDFTeXify-Viewer", !|1|);
-    Assign(!"PDFTeXify-View_Search", !|1|);
+    Release(!"PDFTeXify-View_Search");
     Release(!"PDFTeXify-STD_IO");
     Release(!"PDFTeXify-No_Interaction");
     Release(!"PDFTeXify-C-style-errors");
