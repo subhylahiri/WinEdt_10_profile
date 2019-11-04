@@ -1,0 +1,17 @@
+// DocInput.edt
+// ======================
+// Parse the full filename for
+//   \DocInput{file}
+//   \DocInput{\jobname.dtx}
+// input directives
+// =====================================================
+// %?  = the last wildcard
+// %!? = the whole line span containing the directive...
+// =====================================================
+  PushTagsandRegisters;
+
+  SubstituteInString("%?","\jobname","%N",0,-10);
+
+  PopTagsandRegisters;
+
+End;

@@ -1,0 +1,15 @@
+// ExternalDocument.edt
+// ======================
+// Parse the full filename for
+//   \externaldocument[][]{file}
+// input directives
+// =====================================================
+// %?  = the last wildcard
+// %!? = the whole line span containing the directive...
+// =====================================================
+  PushTagsandRegisters;
+//  SetFileMode('EXT',0,0)
+  LetReg(-10,"%?");
+  PopTagsandRegisters;
+
+End;
