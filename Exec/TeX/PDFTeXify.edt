@@ -169,7 +169,8 @@ Exit;
   LetReg(9,'PDFTeXify');// Execution Modes Compiler
   LetReg(8,'log');      // Log File (or empty)
   LetReg(7,'pdf');      // Output Format
-  LetReg(6,'%O');       // Startup Folder
+  LetReg(6,'%P');       // Startup Folder
+//  LetReg(6,'%O');       // Startup Folder
 
   // MiKTeX's texify.exe?
   IfIStr("%$('%!9-Executable');",!"texify.exe",!"=",!"Assign(!'TeX-Opt',!'--tex-option=');",!"Assign(!'TeX-Opt');");
