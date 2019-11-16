@@ -42,8 +42,8 @@
 
 // etc...
 
-  Assign("CMD","%@('SystemRoot');\system32\WindowsPowerShell\v1.0\powershell.exe -PSConsoleFile %@('UserProfile');\powershell.psc1");
-//  Assign("CMD","%@('AppData');\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell.lnk");
+//  Assign("CMD","%@('ProgramFiles');\PowerShell\6\pwsh.exe");
+  Assign("CMD","pwsh.exe");
   Assign('write18-status','--restrict-write18');
 // ==================================================================
 // Done...
