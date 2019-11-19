@@ -34,6 +34,6 @@
   Assign(!"CS-Output", !"0");
   Assign(!"Compile-UseSelectedTeXEngine", !"1");
   Assign(!"Compile-UsePragmaComments", !"1");
-  Assign(!"Compile-UseBatchFile", !"0");
+  Assign(!"Compile-UseBatchFile", !"1");
 
 End;
