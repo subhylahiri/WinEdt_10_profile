@@ -6,14 +6,19 @@
   IfNum(%c,'1','>','InsLine;');
   Mark(1);
   LetReg(0,"%c"); // *** Current Column
+  Interface("Documentation type");
+    Item("Any","LetReg(9,'');");
+    Item("User","LetReg(9,'userdocs');");
+    Item("Design","LetReg(9,'designdocs');");
+    Item("Code","LetReg(9,'codedocs');");
+  ShowList(0,1,"Do('%%?');");
   Ins('%%^^A-----------------------------------------------------------------------------');
   NewLine;
   Ins('%% \end{implementation}');
   NewLine;
   Ins('%% \begin{documentation}');
   NewLine;
-  Ins('%% \begin{userdocs} ^^A userdocs, designdocs, codedocs');
-  NewLine;
+  IfStr("%!9","","<>",!"Ins('%% \begin{%!9}');NewLine;")
   GotoCol(%!0);                     // *** Original Column
   TrimLine;
   IfStr("%!1","","=",!"Ins('%% ');",!"Ins('%!1');");
@@ -21,8 +26,7 @@
     "IfNum(%c,'1','>','Ins(''%\'');');");
   GotoCol(%!0);                     // *** Original Column
   TrimLine;
-  Ins("%% \end{userdocs}");
-  NewLine;
+  IfStr("%!9","","<>",!"Ins('%% \end{%!9}');NewLine;");
   Ins("%% \end{documentation}");
   NewLine;
   Ins("%% \begin{implementation}");
