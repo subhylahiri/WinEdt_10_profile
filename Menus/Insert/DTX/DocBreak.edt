@@ -12,6 +12,8 @@
   NewLine;
   Ins('%% \begin{documentation}');
   NewLine;
+  Ins('%% \begin{userdocs} ^^A userdocs, designdocs, codedocs');
+  NewLine;
   GotoCol(%!0);                     // *** Original Column
   TrimLine;
   IfStr("%!1","","=",!"Ins('%% ');",!"Ins('%!1');");
@@ -19,6 +21,8 @@
     "IfNum(%c,'1','>','Ins(''%\'');');");
   GotoCol(%!0);                     // *** Original Column
   TrimLine;
+  Ins("%% \end{userdocs}");
+  NewLine;
   Ins("%% \end{documentation}");
   NewLine;
   Ins("%% \begin{implementation}");
