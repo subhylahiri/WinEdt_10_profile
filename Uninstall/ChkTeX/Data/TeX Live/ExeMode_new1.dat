@@ -1,0 +1,28 @@
+    Assign(!"PDFTeXify-Pause", !|1|);
+
+// ChkTeX
+    Assign(!"ChkTeX-Executable", !|chktex.exe|);
+    Assign(!"ChkTeX-Switches", !|-o "%N.clg"|);
+    Assign(!"ChkTeX-Parameters", !|"%N%T"|);
+    Release(!"ChkTeX-Paper_Size");
+    Release(!"ChkTeX-Paper_Custom_Size");
+    Release(!"ChkTeX-Landscape");
+    Release(!"ChkTeX-GUI");
+    Release(!"ChkTeX-High_Priority");
+    Assign(!"ChkTeX-Wait", !|1|);
+    Release(!"ChkTeX-Report");
+    Assign(!"ChkTeX-Errors", !|1|);
+    Assign(!"ChkTeX-Warnings", !|1|);
+    Release(!"ChkTeX-ExitCode");
+    Release(!"ChkTeX-Viewer");
+    Release(!"ChkTeX-View_Search");
+    Release(!"ChkTeX-STD_IO");
+    Release(!"ChkTeX-No_Interaction");
+    Release(!"ChkTeX-C-style-errors");
+    Release(!"ChkTeX-Clean_Build");
+    Assign(!"ChkTeX-WinEdt_Console", !|1|);
+    Release(!"ChkTeX-Hidden_Window");
+    Release(!"ChkTeX-Background_Window");
+    Assign(!"ChkTeX-Pause", !|1|);
+
+// BibTeX

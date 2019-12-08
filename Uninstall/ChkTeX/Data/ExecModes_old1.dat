@@ -1,0 +1,4 @@
+                 $$1111111111111,// Enable Flags (13)<>
+                 $$1111);        // Enable Pause..WinEdt Console Flags (4)
+
+  AddApplication(!'BibTeX',      // Name<>

@@ -1,0 +1,3 @@
+  IfFileExists('%E',!'Relax;',!'Exit;');
+
+// @DEFAULT

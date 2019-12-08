@@ -1,0 +1,172 @@
+// -*- ASCII:EDT -*-
+
+    Prompt("This macro will uninstall ChkTeX support...%\>
+It is recommended that you close all files (or project) to make it faster.%\%\>
+                            Continue?",1,0);
+
+    Assign("Package","ChkTeX");
+
+    PushTagsandRegisters;
+
+    StartWorking('Uninstalling...');
+    ProcessMessages;
+
+    ShowConsole(1,1);
+    ResetConsole;
+    SetConsoleText("Uninstalling...%\%\",1);
+    Call('Uninstall_Start');
+    Call('Uninstall_Task');
+    SetConsoleText("%\Done...%\",1,1);
+
+    PopTagsandRegisters;
+
+    StopWorking;
+
+    Prompt("Uninstallation Complete! See the Console for uninstall info.",0,1);
+
+    Release("Filename");
+    Release("Filetype");
+    Release("Folder");
+    Release("Package");
+
+Exit;
+
+:Uninstall_Start:: ==================================================
+
+    // Delete files
+    Assign("Filetype",".edt");
+
+      Assign("Folder","Menus\Search");
+      Assign("Filename","ChkTeX");
+      Call('File_Delete');
+      Assign("Folder","Menus\Search");
+      Assign("Filename","_ChkTeXerrLog");
+      Call('File_Delete');
+
+    // Update config files
+    Assign("Filetype",".ini");
+
+      Assign("Folder","ConfigEx");
+      Assign("Filename","MainMenu");
+      Call('File_Update');
+      Assign("Folder","ConfigEx");
+      Assign("Filename","Toolbar");
+      Call('File_Update');
+
+    Assign("Filetype",".edt");
+
+      Assign("Folder","Exec\MiKTeX");
+      Assign("Filename","ExecModes");
+      Call('File_Update');
+
+      Assign("Folder","Exec\TeX Live");
+      Assign("Filename","ExecModes");
+      Call('File_Update');
+
+      Assign("Folder","Exec");
+      Assign("Filename","_errLog");
+      Call('File_Update');
+      Assign("Filename","ExeCompilerPre");
+      Call('File_Update');
+      Assign("Filename","ExeCompilerPost");
+      Call('File_Update');
+      Assign("Filename","MiKTeX\ExeMode_Default");
+      Call('File_Update');
+      Assign("Filename","TeX Live\ExeMode_Default");
+      Call('File_Update');
+
+    // Reload personal settings
+    IfFileExists("%b\ConfigEx\UserPreferences.ini",!'LoadConfig("%b\ConfigEx\UserPreferences.ini");');
+    IfFileExists("%b\ConfigEx\Private.ini",!'LoadConfig("%b\ConfigEx\Private.ini");');
+
+    // Extra Task
+    IfFileExists("%b\Exec\MiKTeX\ExeMode.edt",>
+      !'ReadFile("%b\Exec\MiKTeX\ExeMode.edt",0);>
+        SubstituteInString("%!0",>
+          "/"+"/ ChkTeX>**/"+"/ BibTeX>","/"+"/ BibTeX>",11);>
+        WriteFile("%b\Exec\MiKTeX\ExeMode.edt","%!0");');
+    IfFileExists("%b\Exec\TeX Live\ExeMode.edt",>
+      !'ReadFile("%b\Exec\TeX Live\ExeMode.edt",0);>
+        SubstituteInString("%!0",>
+          "/"+"/ ChkTeX>**/"+"/ BibTeX>","/"+"/ BibTeX>",11);>
+        WriteFile("%b\Exec\TeX Live\ExeMode.edt","%!0");');
+    Exe('%b\Exec\Config.edt');
+
+Return;
+
+:File_Delete:: ======================================================
+
+    IfFileExists('%b\%$(|Folder|);\%$(|Filename|);%$(|Filetype|);',!'Relax;',>
+      !'SetConsoleText("WARNING: >
+File %$(|Filename|);%$(|Filetype|); not found in %$(|Folder|);.%\",1,1);Return;');
+    DeleteFile('%b\%$(|Folder|);\%$(|Filename|);%$(|Filetype|);');
+    IfOK(!'SetConsoleText("OK:      >
+File %$(|Filename|);%$(|Filetype|); deleted from %$(|Folder|);.%\",1,1);',>
+         !'SetConsoleText("ERROR:   >
+File %$(|Filename|);%$(|Filetype|); not deleted from %$(|Folder|);!!!%\",1,1);');
+
+Return;
+
+:File_Update:: ======================================================
+
+    IfFileExists('%b\%$(|Folder|);\%$(|Filename|);%$(|Filetype|);',!'Relax;',>
+      !'SetConsoleText("WARNING: >
+File %$(|Folder|);\%$(|Filename|);%$(|Filetype|); not found.%\",1,1);Return;');
+    ReadFile("%b\%$(|Folder|);\%$(|Filename|);%$(|Filetype|);",0);
+    LetRegNum(7,1);
+    Loop(!`>
+      IfFileExists('%C\Data\%$(|Filename|);_new%!7.dat',>
+        !|Call('Update_Substitute');LetRegNum(7,%!7+1);|,>
+        !|Stop;|);`);
+    WriteFile("%b\%$(|Folder|);\%$(|Filename|);%$(|Filetype|);","%!0");
+    IfStr('%$(|Filetype|);','.ini','=',>
+      !'LoadConfig("%b\%$(|Folder|);\%$(|Filename|);%$(|Filetype|);");');
+
+Return;
+
+:Update_Substitute:: ================================================
+
+    ReadFile("%C\Data\%$(|Filename|);_old%!7.dat",1);
+    ReadFile("%C\Data\%$(|Filename|);_new%!7.dat",2);
+    SubstituteInString("%!0","%!2","%!1");
+    IfOK(!'SetConsoleText("OK:      >
+File %$(|Folder|);\%$(|Filename|);%$(|Filetype|); successfully restored.%\",1,1);',>
+         !'FindInString("%!0","%!1",-1,-1,10);>
+           IfOK(!`SetConsoleText("OK:      >
+File %$(|Folder|);\%$(|Filename|);%$(|Filetype|); not modified (already OK).%\",1,1);`,>
+                !`SetConsoleText("ERROR:   >
+File %$(|Folder|);\%$(|Filename|);%$(|Filetype|); not restored!!!%\",1,1);`);');
+
+Return;
+
+:Uninstall_Task:: ===================================================
+
+    CloseFile("%X");
+
+    // Delete uninstall files
+    ListFolderFiles(0,"%b\Uninstall\%$(|Package|);","",1,1);
+    LstEnum("%!0","%\");
+    LstGetCount(1);
+    Repeat(%!1,>
+      !`LstGetItem(2,%!c-1);>
+        DeleteFile("%b\Uninstall\%$(|Package|);\%!2");>
+        ProcessMessages;>
+       `);
+    LstRelease;
+
+    // Extra Task
+    SetFolder("%b");
+    Exe('%b\Config\Cleanup.edt');
+    RemoveDirectory("%b\ConfigEx");
+    RemoveDirectory("%b\Menus\Search");
+    RemoveDirectory("%b\Menus");
+    RemoveDirectory("%b\Exec\MiKTeX");
+    RemoveDirectory("%b\Exec\TeX Live");
+    RemoveDirectory("%b\Exec");
+    RemoveDirectory("%b\Uninstall\%$(|Package|);\Data\MiKTeX");
+    RemoveDirectory("%b\Uninstall\%$(|Package|);\Data\TeX Live");
+    RemoveDirectory("%b\Uninstall\%$(|Package|);\Data");
+    RemoveDirectory("%b\Uninstall\%$(|Package|);");
+    RemoveDirectory("%b\Uninstall");
+
+Return;

@@ -1,0 +1,12 @@
+  ITEM="-"
+  ITEM="ChkTeX"
+    CAPTION="Ch&kTeX"
+    IMAGE="TeXCheck"
+    SAVE_INPUT=1
+    MACRO="Exe('%b\Menus\Search\ChkTeX.edt');"
+    SHORTCUT="49219::Ctrl+Alt+C"
+    REQ_FILTER=`"%!M=TeX"`+
+               `|"%!M=TeX:INS"|"%!M=TeX:DTX"|"%!M=TeX:STY"|"%!M=TeX:AUX"`
+  ITEM="-"
+  // Inserted by ChkTeX
+  ITEM="Compare_Documents"

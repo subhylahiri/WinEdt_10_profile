@@ -1,0 +1,7 @@
+  IfFileExists('%E',!'Relax;',!'Exit;');
+
+// @BEGIN: ChkTeX
+   IfStr("%E","%O\%N.clg","=",!"Exe('%b\Menus\Search\_ChkTeXerrLog.edt');Exit;");
+// @END: ChkTeX
+
+// @DEFAULT

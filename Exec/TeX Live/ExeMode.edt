@@ -1,8 +1,8 @@
-// Execution Modes - MiKTeX
+// Execution Modes - TeX Live
 
 // LaTeX
     Assign(!"LaTeX-Executable", !|latex.exe|);
-    Assign(!"LaTeX-Switches", !|%0 %$('write18-status'); -aux-directory="%O" -include-directory="%O"|);
+    Assign(!"LaTeX-Switches", !|%0|);
     Assign(!"LaTeX-Parameters", !|"%N%T"|);
     Release(!"LaTeX-Paper_Size");
     Release(!"LaTeX-Paper_Custom_Size");
@@ -77,7 +77,7 @@
 
 // PDFLaTeX
     Assign(!"PDFLaTeX-Executable", !|pdflatex.exe|);
-    Assign(!"PDFLaTeX-Switches", !|%$('write18-status'); -aux-directory="%O" -include-directory="%O"|);
+    Release(!"PDFLaTeX-Switches");
     Assign(!"PDFLaTeX-Parameters", !|"%N%T"|);
     Release(!"PDFLaTeX-Paper_Size");
     Release(!"PDFLaTeX-Paper_Custom_Size");
@@ -89,7 +89,7 @@
     Release(!"PDFLaTeX-Errors");
     Release(!"PDFLaTeX-Warnings");
     Release(!"PDFLaTeX-ExitCode");
-    Assign(!"PDFLaTeX-Viewer", !|1|);
+    Release(!"PDFLaTeX-Viewer");
     Release(!"PDFLaTeX-View_Search");
     Release(!"PDFLaTeX-STD_IO");
     Release(!"PDFLaTeX-No_Interaction");
@@ -227,7 +227,7 @@
 
 // TeXify
     Assign(!"TeXify-Executable", !|%@("LATEX");|);
-    Assign(!"TeXify-Switches", !|%0  -aux-directory="%O" -include-directory="%O"|);
+    Assign(!"TeXify-Switches", !|%0|);
     Assign(!"TeXify-Parameters", !|"%N%T"|);
     Release(!"TeXify-Paper_Size");
     Release(!"TeXify-Paper_Custom_Size");
@@ -240,7 +240,7 @@
     Release(!"TeXify-Warnings");
     Release(!"TeXify-ExitCode");
     Assign(!"TeXify-Viewer", !|1|);
-    Assign(!"TeXify-View_Search", !|1|);
+    Release(!"TeXify-View_Search");
     Release(!"TeXify-STD_IO");
     Release(!"TeXify-No_Interaction");
     Release(!"TeXify-C-style-errors");
@@ -252,7 +252,7 @@
 
 // PDFTeXify
     Assign(!"PDFTeXify-Executable", !|%@("PDFLATEX");|);
-    Assign(!"PDFTeXify-Switches", !|%$('write18-status');  -aux-directory="%O" -include-directory="%O"|);
+    Release(!"PDFTeXify-Switches");
     Assign(!"PDFTeXify-Parameters", !|"%N%T"|);
     Release(!"PDFTeXify-Paper_Size");
     Release(!"PDFTeXify-Paper_Custom_Size");

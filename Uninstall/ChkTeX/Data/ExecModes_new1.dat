@@ -1,0 +1,14 @@
+                 $$1111111111111,// Enable Flags (13)<>
+                 $$1111);        // Enable Pause..WinEdt Console Flags (4)
+
+  AddApplication(!'ChkTeX',      // Name<>
+                 !'chktex.exe',  // Executable<>
+                 !'-o "%N.clg"', // Switches<>
+                 !'"%N%T"',      // Parameters<>
+                 !'',            // Environmental Variable <-- Executable<>
+                 0,              // Paper Size Switch Enabled<>
+                 0,              // Landscape Switch Enabled<>
+                 $$0001001110111,// Enable Flags (13)<>
+                 $$1111);        // Enable Pause..WinEdt Console Flags (4)
+
+  AddApplication(!'BibTeX',      // Name<>

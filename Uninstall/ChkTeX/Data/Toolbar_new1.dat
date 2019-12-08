@@ -1,0 +1,6 @@
+    MENU="Incremental_Search"
+  BUTTON="|"
+  BUTTON="ChkTeX"
+    CONFIG_FILTER="Default;MiKTeX;TeX Live"
+  BUTTON="|"
+  BUTTON="Spell_Check"
