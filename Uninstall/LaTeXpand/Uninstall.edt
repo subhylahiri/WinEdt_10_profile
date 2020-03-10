@@ -1,0 +1,115 @@
+// -*- ASCII:EDT -*-
+
+    Prompt("This macro will uninstall LaTeXpand package...%\>
+It is recommended that you close all files (or project) to make it faster.%\%\>
+                            Continue?",1,0);
+
+    Assign("Package","LaTeXpand");
+
+    PushTagsandRegisters;
+
+    StartWorking('Uninstalling...');
+    ProcessMessages;
+
+    ShowConsole(1,1);
+    ResetConsole;
+    SetConsoleText("Uninstalling...%\%\",1);
+    Call('Uninstall_Start');
+    Call('Uninstall_Task');
+    SetConsoleText("%\Done...%\",1,1);
+
+    PopTagsandRegisters;
+
+    StopWorking;
+
+    Prompt("Uninstallation Complete! See the Console for uninstall info.",0,1);
+
+    Release("Filename");
+    Release("Filetype");
+    Release("Folder");
+    Release("Package");
+
+Exit;
+
+:Uninstall_Start:: ==================================================
+
+    // Delete files
+
+    Assign("Folder","MUI\%$(|Package|);");
+
+      Assign("Filetype",".edt");
+      Assign("Filename","%$(|Package|);");
+      Call('File_Delete');
+
+    // Update config files
+    Assign("Folder","ConfigEx");
+
+      Assign("Filetype",".ini");
+      Assign("Filename","MainMenu");
+      Call('File_Include');
+
+    // Reload personal settings
+    IfFileExists("%b\ConfigEx\UserPreferences.ini",!'LoadConfig("%b\ConfigEx\UserPreferences.ini");');
+    IfFileExists("%b\ConfigEx\Private.ini",!'LoadConfig("%b\ConfigEx\Private.ini");');
+
+Return;
+
+:File_Delete:: ======================================================
+
+    IfFileExists('%b\%$(|Folder|);\%$(|Filename|);%$(|Filetype|);',!'Relax;',>
+      !'SetConsoleText("WARNING: >
+File %$(|Filename|);%$(|Filetype|); not found in %$(|Folder|);.%\",1,1);Return;');
+    DeleteFile('%b\%$(|Folder|);\%$(|Filename|);%$(|Filetype|);');
+    IfOK(!'SetConsoleText("OK:      >
+File %$(|Filename|);%$(|Filetype|); deleted from %$(|Folder|);.%\",1,1);',>
+         !'SetConsoleText("ERROR:   >
+File %$(|Filename|);%$(|Filetype|); not deleted from %$(|Folder|);!!!%\",1,1);');
+
+Return;
+
+:File_Include:: =====================================================
+
+    IfFileExists('%b\%$(|Folder|);\%$(|Filename|);%$(|Filetype|);',!'Relax;',>
+      !'SetConsoleText("WARNING: >
+File %$(|Folder|);\%$(|Filename|);%$(|Filetype|); not found.%\",1,1);Return;');
+    ReadFile("%b\%$(|Folder|);\%$(|Filename|);%$(|Filetype|);",0);
+    ReadFile("%C\Data\%$(|Filename|);_add.dat",1);
+    FindInString("%!0","Begin: Added by LaTeXpand_install.edt",-1,-1);
+    IfOK(!'SubstituteInString("%!0","%!1","");>
+           IfOK(!`SetConsoleText("OK:      >
+File %$(|Folder|);\%$(|Filename|);%$(|Filetype|); successfully restored.%\",1,1);`,>
+                !`SetConsoleText("ERROR:   >
+File %$(|Folder|);\%$(|Filename|);%$(|Filetype|); not restored!!!%\",1,1);`);',>
+         !'SetConsoleText("OK:      >
+File %$(|Folder|);\%$(|Filename|);%$(|Filetype|); not modified (already OK).%\",1,1);');
+    WriteFile("%b\%$(|Folder|);\%$(|Filename|);%$(|Filetype|);","%!0");
+    LoadConfig("%b\%$(|Folder|);\%$(|Filename|);%$(|Filetype|);");
+
+Return;
+
+:Uninstall_Task:: ===================================================
+
+    CloseFile("%X");
+
+    // Delete uninstall files
+    ListFolderFiles(0,"%b\Uninstall\%$(|Package|);","",1,1);
+    LstEnum("%!0","%\");
+    LstGetCount(1);
+    Repeat(%!1,>
+      !`LstGetItem(2,%!c-1);>
+        DeleteFile("%b\Uninstall\%$(|Package|);\%!2");>
+        ProcessMessages;>
+       `);
+    LstRelease;
+
+    // Extra Task
+    SetFolder("%b");
+    Exe('%b\Config\Cleanup.edt');
+    RemoveDirectory("%b\ConfigEx");
+    RemoveDirectory("%b\MUI\%$(|Package|);");
+    RemoveDirectory("%b\MUI");
+    RemoveDirectory("%b\Uninstall\%$(|Package|);\Data");
+    RemoveDirectory("%b\Uninstall\%$(|Package|);");
+    RemoveDirectory("%b\Uninstall");
+
+Return;
